@@ -1,0 +1,11 @@
+output   = "my_models"
+wipe     = true
+no-tests = true
+
+[mysql]
+  dbname  = "bookworm"
+  host    = "localhost"
+  port    = 3306
+  user    = "root"
+  pass    = "@kingkunta"
+  sslmode = "false"

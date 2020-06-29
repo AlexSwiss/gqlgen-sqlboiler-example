@@ -1,0 +1,193 @@
+directive @isAuthenticated on FIELD_DEFINITION
+
+type Author {
+	id: ID!
+	firstname: String
+	lastname: String
+	book: 
+}
+
+type Book {
+	id: ID!
+	name: String
+	category: String
+}
+
+
+input IDFilter {
+	equalTo: ID
+	notEqualTo: ID
+	in: [ID!]
+	notIn: [ID!]
+}
+
+input StringFilter {
+	equalTo: String
+	notEqualTo: String
+
+	in: [String!]
+	notIn: [String!]
+
+	startWith: String
+	notStartWith: String
+
+	endWith: String
+	notEndWith: String
+
+	contain: String
+	notContain: String
+
+	startWithStrict: String # Camel sensitive
+	notStartWithStrict: String # Camel sensitive
+
+	endWithStrict: String # Camel sensitive
+	notEndWithStrict: String # Camel sensitive
+
+	containStrict: String # Camel sensitive
+	notContainStrict: String # Camel sensitive
+}
+
+input IntFilter {
+	equalTo: Int
+	notEqualTo: Int
+	lessThan: Int
+	lessThanOrEqualTo: Int
+	moreThan: Int
+	moreThanOrEqualTo: Int
+	in: [Int!]
+	notIn: [Int!]
+}
+
+input FloatFilter {
+	equalTo: Float
+	notEqualTo: Float
+	lessThan: Float
+	lessThanOrEqualTo: Float
+	moreThan: Float
+	moreThanOrEqualTo: Float
+	in: [Float!]
+	notIn: [Float!]
+}
+
+input BooleanFilter {
+	equalTo: Boolean
+	notEqualTo: Boolean
+}
+
+input AuthorFilter {
+	search: String
+	where: AuthorWhere
+}
+
+input AuthorWhere {
+	id: IDFilter
+	firstname: StringFilter
+	lastname: StringFilter
+	book: Where
+	or: AuthorWhere
+	and: AuthorWhere
+}
+
+input BookFilter {
+	search: String
+	where: BookWhere
+}
+
+input BookWhere {
+	id: IDFilter
+	name: StringFilter
+	category: StringFilter
+	or: BookWhere
+	and: BookWhere
+}
+
+type Query {
+	author(id: ID!): Author!@isAuthenticated
+	authors(filter: AuthorFilter): [Author!]!@isAuthenticated
+	book(id: ID!): Book!@isAuthenticated
+	books(filter: BookFilter): [Book!]!@isAuthenticated
+}
+
+input AuthorCreateInput {
+	firstname: String
+	lastname: String
+	bookId: ID
+}
+
+input AuthorUpdateInput {
+	firstname: String
+	lastname: String
+	bookId: ID
+}
+
+input AuthorsCreateInput {
+	authors: [AuthorCreateInput!]!}
+
+type AuthorPayload {
+	author: Author!
+}
+
+type AuthorDeletePayload {
+	id: ID!
+}
+
+type AuthorsPayload {
+	authors: [Author!]!
+}
+
+type AuthorsDeletePayload {
+	ids: [ID!]!
+}
+
+type AuthorsUpdatePayload {
+	ok: Boolean!
+}
+
+input BookCreateInput {
+	name: String
+	category: String
+}
+
+input BookUpdateInput {
+	name: String
+	category: String
+}
+
+input BooksCreateInput {
+	books: [BookCreateInput!]!}
+
+type BookPayload {
+	book: Book!
+}
+
+type BookDeletePayload {
+	id: ID!
+}
+
+type BooksPayload {
+	books: [Book!]!
+}
+
+type BooksDeletePayload {
+	ids: [ID!]!
+}
+
+type BooksUpdatePayload {
+	ok: Boolean!
+}
+
+type Mutation {
+	createAuthor(input: AuthorCreateInput!): AuthorPayload!@isAuthenticated
+	createAuthors(input: AuthorsCreateInput!): AuthorsPayload!@isAuthenticated
+	updateAuthor(id: ID!, input: AuthorUpdateInput!): AuthorPayload!@isAuthenticated
+	updateAuthors(filter: AuthorFilter, input: AuthorUpdateInput!): AuthorsUpdatePayload!@isAuthenticated
+	deleteAuthor(id: ID!): AuthorDeletePayload!@isAuthenticated
+	deleteAuthors(filter: AuthorFilter): AuthorsDeletePayload!@isAuthenticated
+	createBook(input: BookCreateInput!): BookPayload!@isAuthenticated
+	createBooks(input: BooksCreateInput!): BooksPayload!@isAuthenticated
+	updateBook(id: ID!, input: BookUpdateInput!): BookPayload!@isAuthenticated
+	updateBooks(filter: BookFilter, input: BookUpdateInput!): BooksUpdatePayload!@isAuthenticated
+	deleteBook(id: ID!): BookDeletePayload!@isAuthenticated
+	deleteBooks(filter: BookFilter): BooksDeletePayload!@isAuthenticated
+}
+
